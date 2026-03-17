@@ -1,0 +1,72 @@
+.project-form {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 600px;
+}
+
+.project-form h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1e1e2f;
+}
+
+.project-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-form input,
+.project-form textarea,
+.project-form select {
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  width: 100%;
+}
+
+.project-form input:focus,
+.project-form textarea:focus,
+.project-form select:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+.project-form textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.form-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-buttons button[type="submit"] {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.form-buttons button[type="button"] {
+  background-color: #e2e8f0;
+  color: #333;
+}
+
+.form-buttons button:hover {
+  opacity: 0.9;
+}

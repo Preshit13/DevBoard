@@ -1,0 +1,65 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1e1e2f;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.app-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.app-header nav {
+  display: flex;
+  gap: 10px;
+}
+
+.app-header nav button {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.app-header nav button:hover {
+  background-color: #4338ca;
+}
+
+.app-instructions {
+  background-color: #e0f2fe;
+  border-left: 4px solid #0284c7;
+  padding: 10px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.app-main {
+  margin-top: 10px;
+}

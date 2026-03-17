@@ -1,0 +1,77 @@
+.project-card {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.project-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #1e1e2f;
+}
+
+.project-author {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.project-category {
+  font-size: 13px;
+  color: #4f46e5;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.project-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.stack-tag {
+  background-color: #ede9fe;
+  color: #4f46e5;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.project-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.project-actions button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.project-actions button:first-child {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.project-actions button:nth-child(2) {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.project-actions button:last-child {
+  background-color: #ef4444;
+  color: white;
+}
+
+.project-actions button:hover {
+  opacity: 0.9;
+}
