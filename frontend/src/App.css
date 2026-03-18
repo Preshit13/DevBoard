@@ -63,3 +63,65 @@ body {
 .app-main {
   margin-top: 10px;
 }
+
+.detail-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  margin-bottom: 20px;
+}
+
+.detail-bookmark-btn {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.detail-bookmark-btn:hover {
+  background-color: #4338ca;
+}
+
+.detail-feedback-btn {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.detail-feedback-btn:hover {
+  background-color: #059669;
+}
+
+.feedback-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.feedback-view-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e1e2f;
+}
+
+.feedback-view-header button {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.feedback-view-header button:hover {
+  background-color: #059669;
+}
