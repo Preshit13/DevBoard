@@ -35,6 +35,7 @@ body {
 .app-header nav {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .app-header nav button {
@@ -49,6 +50,20 @@ body {
 
 .app-header nav button:hover {
   background-color: #4338ca;
+}
+
+.app-user {
+  color: white;
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+.app-header nav button:last-child {
+  background-color: #ef4444;
+}
+
+.app-header nav button:last-child:hover {
+  background-color: #dc2626;
 }
 
 .app-instructions {
@@ -124,4 +139,50 @@ body {
 
 .feedback-view-header button:hover {
   background-color: #059669;
+}
+
+.app-user-menu {
+  position: relative;
+}
+
+.app-user-btn {
+  background-color: transparent !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.app-user-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.app-user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 42px;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  min-width: 120px;
+}
+
+.app-user-dropdown button {
+  width: 100%;
+  padding: 10px 16px;
+  background: none !important;
+  color: #ef4444 !important;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.app-user-dropdown button:hover {
+  background-color: #fef2f2 !important;
 }

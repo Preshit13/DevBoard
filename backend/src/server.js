@@ -1,5 +1,7 @@
 const express = require("express");
+const session = require("express-session");
 const { connectDB } = require("./db/connection");
+const { router: authRouter, passport } = require("./routes/auth");
 
 const projectsRouter = require("./routes/projects");
 const feedbackRouter = require("./routes/feedback");
@@ -13,12 +15,26 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
 });
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "devboard_secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false },
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/auth", authRouter);
 app.use("/api/projects", projectsRouter);
 app.use("/api/feedback", feedbackRouter);
 app.use("/api/bookmarks", bookmarksRouter);

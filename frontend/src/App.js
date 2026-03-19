@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useUser } from "./context/UserContext";
 import ProjectList from "./components/ProjectList";
 import ProjectForm from "./components/ProjectForm";
 import ProjectDetail from "./components/ProjectDetail";
@@ -6,14 +7,36 @@ import StatsPanel from "./components/StatsPanel";
 import FeedbackForm from "./components/FeedbackForm";
 import FeedbackList from "./components/FeedbackList";
 import BookmarkList from "./components/BookmarkList";
+import Login from "./components/Login";
+import Register from "./components/Register";
 import "./App.css";
 
 const BACKEND_URL = "http://localhost:5000";
 
 function App() {
+  const { user, loading, logout } = useUser();
   const [view, setView] = useState("list");
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
+  const [authView, setAuthView] = useState("login");
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  if (loading) return <p>Loading...</p>;
+
+  if (!user) {
+    return (
+      <div className="app">
+        <header className="app-header">
+          <h1>DevBoard</h1>
+        </header>
+        {authView === "login" ? (
+          <Login onSwitchToRegister={() => setAuthView("register")} />
+        ) : (
+          <Register onSwitchToLogin={() => setAuthView("login")} />
+        )}
+      </div>
+    );
+  }
 
   function handleView(project) {
     setSelectedProject(project);
@@ -52,13 +75,12 @@ function App() {
   }
 
   function handleBookmark(projectId) {
-    const userName = prompt("Enter your username to bookmark:");
-    if (!userName) return;
     const note = prompt("Add a note (optional):") || "";
     fetch(`${BACKEND_URL}/api/bookmarks`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ projectId, userName, note }),
+      credentials: "include",
+      body: JSON.stringify({ projectId, userName: user.username, note }),
     })
       .then((res) => res.json())
       .then(() => alert("Bookmark added!"))
@@ -82,6 +104,26 @@ function App() {
           <button onClick={() => setView("stats")}>Stats</button>
           <button onClick={() => setView("feedback")}>Feedback</button>
           <button onClick={() => setView("bookmarks")}>Bookmarks</button>
+          <div className="app-user-menu">
+            <button
+              className="app-user-btn"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              {user.displayName} ▾
+            </button>
+            {showDropdown && (
+              <div className="app-user-dropdown">
+                <button
+                  onClick={() => {
+                    logout();
+                    setShowDropdown(false);
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </nav>
       </header>
 
@@ -155,7 +197,7 @@ function App() {
             onCancel={() => setView(selectedProject ? "detail" : "feedback")}
           />
         )}
-        {view === "bookmarks" && <BookmarkList />}
+        {view === "bookmarks" && <BookmarkList userName={user.username} />}
       </main>
     </div>
   );
