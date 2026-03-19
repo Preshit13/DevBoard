@@ -115,7 +115,7 @@ async function seed() {
 
   // Insert 600 projects
   const projects = [];
-  for (let i = 0; i < 600; i++) {
+  for (let i = 0; i < 1000; i++) {
     projects.push({
       title: `${randomItem(titles)} ${i + 1}`,
       description: randomItem(descriptions),
