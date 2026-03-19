@@ -8,7 +8,7 @@ const BACKEND_URL = "http://localhost:5000";
 function FeedbackList({ projectId, onEdit }) {
   const [feedbackItems, setFeedbackItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortOrder, setSortOrder] = useState("recent");
 
   useEffect(() => {
     fetchFeedback();
@@ -17,12 +17,24 @@ function FeedbackList({ projectId, onEdit }) {
 
   function fetchFeedback() {
     setLoading(true);
-    const url = projectId
-      ? `${BACKEND_URL}/api/feedback/project/${projectId}?sort=${sortOrder}`
-      : `${BACKEND_URL}/api/feedback?sort=${sortOrder}`;
+    let url;
+    if (sortOrder === "recent") {
+      url = projectId
+        ? `${BACKEND_URL}/api/feedback/project/${projectId}`
+        : `${BACKEND_URL}/api/feedback`;
+    } else {
+      url = projectId
+        ? `${BACKEND_URL}/api/feedback/project/${projectId}?sort=${sortOrder}`
+        : `${BACKEND_URL}/api/feedback?sort=${sortOrder}`;
+    }
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
+        if (sortOrder === "recent") {
+          data.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+        }
         setFeedbackItems(data);
         setLoading(false);
       })

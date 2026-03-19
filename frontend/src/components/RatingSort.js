@@ -9,7 +9,8 @@ function RatingSort({ onSortChange }) {
 
   return (
     <div className="rating-sort">
-      <select onChange={handleChange} defaultValue="desc">
+      <select onChange={handleChange} defaultValue="recent">
+        <option value="recent">Most Recent</option>
         <option value="desc">Highest Rating</option>
         <option value="asc">Lowest Rating</option>
       </select>

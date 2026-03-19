@@ -1,10 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./BookmarkCard.css";
+
+const BACKEND_URL = "http://localhost:5000";
 
 function BookmarkCard({ bookmark, onEdit, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [note, setNote] = useState(bookmark.note || "");
+  const [projectTitle, setProjectTitle] = useState("Loading...");
+
+  useEffect(() => {
+    fetch(`${BACKEND_URL}/api/projects/${bookmark.projectId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.title) {
+          setProjectTitle(data.title);
+        } else {
+          setProjectTitle("Unknown Project");
+        }
+      })
+      .catch(() => setProjectTitle("Unknown Project"));
+  }, [bookmark.projectId]);
 
   function handleSave() {
     onEdit(bookmark._id, note);
@@ -14,7 +30,7 @@ function BookmarkCard({ bookmark, onEdit, onDelete }) {
   return (
     <div className="bookmark-card">
       <div className="bookmark-card-header">
-        <span className="bookmark-project">Project: {bookmark.projectId}</span>
+        <span className="bookmark-project">Project: {projectTitle}</span>
         <span className="bookmark-user">by {bookmark.userName}</span>
       </div>
       {isEditing ? (
