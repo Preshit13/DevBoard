@@ -2,6 +2,7 @@
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .project-filter select {
@@ -15,6 +16,21 @@
 }
 
 .project-filter select:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+.project-search-input {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  flex: 1;
+  min-width: 220px;
+}
+
+.project-search-input:focus {
   outline: none;
   border-color: #4f46e5;
 }

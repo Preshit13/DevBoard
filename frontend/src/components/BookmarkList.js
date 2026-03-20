@@ -1,28 +1,38 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import BookmarkCard from "./BookmarkCard";
+import Pagination from "./Pagination";
 import "./BookmarkList.css";
 
 const BACKEND_URL = "http://localhost:5000";
+const LIMIT = 10;
 
 function BookmarkList({ userName }) {
   const [bookmarks, setBookmarks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchBookmarks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userName]);
+  }, [userName, page]);
 
   function fetchBookmarks() {
     setLoading(true);
+    const params = new URLSearchParams();
+    params.append("page", page);
+    params.append("limit", LIMIT);
+
     const url = userName
-      ? `${BACKEND_URL}/api/bookmarks/user/${userName}`
-      : `${BACKEND_URL}/api/bookmarks`;
+      ? `${BACKEND_URL}/api/bookmarks/user/${userName}?${params.toString()}`
+      : `${BACKEND_URL}/api/bookmarks?${params.toString()}`;
+
     fetch(url)
       .then((res) => res.json())
-      .then((data) => {
-        setBookmarks(data);
+      .then((result) => {
+        setBookmarks(result.data);
+        setTotal(result.total);
         setLoading(false);
       })
       .catch((err) => {
@@ -51,7 +61,7 @@ function BookmarkList({ userName }) {
 
   return (
     <div className="bookmark-list">
-      <h2>My Bookmarks ({bookmarks.length})</h2>
+      <h2>My Bookmarks ({total})</h2>
       {bookmarks.length === 0 ? (
         <p className="bookmark-empty">No bookmarks saved yet.</p>
       ) : (
@@ -64,6 +74,12 @@ function BookmarkList({ userName }) {
           />
         ))
       )}
+      <Pagination
+        page={page}
+        total={total}
+        limit={LIMIT}
+        onPageChange={setPage}
+      />
     </div>
   );
 }

@@ -4,31 +4,52 @@ const { ObjectId } = require("mongodb");
 
 const router = express.Router();
 
-// GET all bookmarks
+// GET all bookmarks with pagination
 router.get("/", async (req, res) => {
   try {
     const db = getDB();
-    const bookmarks = await db
+    const { page, limit } = req.query;
+
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const total = await db.collection("bookmarks").countDocuments();
+    const data = await db
       .collection("bookmarks")
       .find()
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNum)
       .toArray();
-    res.json(bookmarks);
+
+    res.json({ data, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// GET bookmarks by user
+// GET bookmarks by user with pagination
 router.get("/user/:userName", async (req, res) => {
   try {
     const db = getDB();
-    const bookmarks = await db
+    const { page, limit } = req.query;
+    const query = { userName: req.params.userName };
+
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const total = await db.collection("bookmarks").countDocuments(query);
+    const data = await db
       .collection("bookmarks")
-      .find({ userName: req.params.userName })
+      .find(query)
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNum)
       .toArray();
-    res.json(bookmarks);
+
+    res.json({ data, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

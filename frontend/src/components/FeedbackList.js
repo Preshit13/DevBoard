@@ -1,41 +1,42 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import RatingSort from "./RatingSort";
+import Pagination from "./Pagination";
 import "./FeedbackList.css";
 
 const BACKEND_URL = "http://localhost:5000";
+const LIMIT = 10;
 
 function FeedbackList({ projectId, onEdit }) {
   const [feedbackItems, setFeedbackItems] = useState([]);
   const [projectTitles, setProjectTitles] = useState({});
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("recent");
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchFeedback();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId, sortOrder]);
+  }, [projectId, sortOrder, page]);
 
   function fetchFeedback() {
     setLoading(true);
-    let url;
-    if (sortOrder === "recent") {
-      url = projectId
-        ? `${BACKEND_URL}/api/feedback/project/${projectId}`
-        : `${BACKEND_URL}/api/feedback`;
-    } else {
-      url = projectId
-        ? `${BACKEND_URL}/api/feedback/project/${projectId}?sort=${sortOrder}`
-        : `${BACKEND_URL}/api/feedback?sort=${sortOrder}`;
-    }
-    fetch(url)
+    const params = new URLSearchParams();
+    if (sortOrder !== "recent") params.append("sort", sortOrder);
+    params.append("page", page);
+    params.append("limit", LIMIT);
+
+    const base = projectId
+      ? `${BACKEND_URL}/api/feedback/project/${projectId}`
+      : `${BACKEND_URL}/api/feedback`;
+
+    fetch(`${base}?${params.toString()}`)
       .then((res) => res.json())
-      .then((data) => {
-        if (sortOrder === "recent") {
-          data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        }
-        setFeedbackItems(data);
-        fetchProjectTitles(data);
+      .then((result) => {
+        setFeedbackItems(result.data);
+        setTotal(result.total);
+        fetchProjectTitles(result.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -74,6 +75,7 @@ function FeedbackList({ projectId, onEdit }) {
 
   function handleSortChange(order) {
     setSortOrder(order);
+    setPage(1);
   }
 
   if (loading) return <p>Loading feedback...</p>;
@@ -81,7 +83,7 @@ function FeedbackList({ projectId, onEdit }) {
   return (
     <div className="feedback-list">
       <div className="feedback-list-header">
-        <h3>Feedback ({feedbackItems.length})</h3>
+        <h3>Feedback ({total})</h3>
         <RatingSort onSortChange={handleSortChange} />
       </div>
       {feedbackItems.length === 0 ? (
@@ -112,6 +114,12 @@ function FeedbackList({ projectId, onEdit }) {
           </div>
         ))
       )}
+      <Pagination
+        page={page}
+        total={total}
+        limit={LIMIT}
+        onPageChange={setPage}
+      />
     </div>
   );
 }

@@ -4,21 +4,36 @@ const { ObjectId } = require("mongodb");
 
 const router = express.Router();
 
-// GET all projects with optional filters
+// GET all projects with optional filters, search, and pagination
 router.get("/", async (req, res) => {
   try {
     const db = getDB();
-    const { techStack, category, date } = req.query;
+    const { techStack, category, date, search, page, limit } = req.query;
     let query = {};
     if (techStack) query.techStack = { $in: [techStack] };
     if (category) query.category = category;
     if (date) query.createdAt = { $gte: new Date(date) };
-    const projects = await db
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const total = await db.collection("projects").countDocuments(query);
+    const data = await db
       .collection("projects")
       .find(query)
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNum)
       .toArray();
-    res.json(projects);
+
+    res.json({ data, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

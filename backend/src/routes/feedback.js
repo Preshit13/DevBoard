@@ -4,39 +4,56 @@ const { ObjectId } = require("mongodb");
 
 const router = express.Router();
 
-// GET all feedback with optional sort
+// GET all feedback with optional sort and pagination
 router.get("/", async (req, res) => {
   try {
     const db = getDB();
-    const { sort } = req.query;
-    let sortQuery = { createdAt: -1 };
-    if (sort === "asc") sortQuery = { rating: 1 };
-    if (sort === "desc") sortQuery = { rating: -1 };
-    const feedback = await db
+    const { sort, page, limit } = req.query;
+    const sortField = sort === "asc" || sort === "desc" ? "rating" : "createdAt";
+    const sortOrder = sort === "asc" ? 1 : -1;
+
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const total = await db.collection("feedback").countDocuments();
+    const data = await db
       .collection("feedback")
       .find()
-      .sort(sortQuery)
+      .sort({ [sortField]: sortOrder })
+      .skip(skip)
+      .limit(limitNum)
       .toArray();
-    res.json(feedback);
+
+    res.json({ data, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// GET feedback by project
+// GET feedback by project with optional sort and pagination
 router.get("/project/:projectId", async (req, res) => {
   try {
     const db = getDB();
-    const { sort } = req.query;
-    let sortQuery = { createdAt: -1 };
-    if (sort === "asc") sortQuery = { rating: 1 };
-    if (sort === "desc") sortQuery = { rating: -1 };
-    const feedback = await db
+    const { sort, page, limit } = req.query;
+    const sortField = sort === "asc" || sort === "desc" ? "rating" : "createdAt";
+    const sortOrder = sort === "asc" ? 1 : -1;
+    const query = { projectId: req.params.projectId };
+
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const total = await db.collection("feedback").countDocuments(query);
+    const data = await db
       .collection("feedback")
-      .find({ projectId: req.params.projectId })
-      .sort(sortQuery)
+      .find(query)
+      .sort({ [sortField]: sortOrder })
+      .skip(skip)
+      .limit(limitNum)
       .toArray();
-    res.json(feedback);
+
+    res.json({ data, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

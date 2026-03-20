@@ -1,30 +1,37 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import ProjectCard from "./ProjectCard";
 import ProjectFilter from "./ProjectFilter";
+import Pagination from "./Pagination";
 import "./ProjectList.css";
 
 const BACKEND_URL = "http://localhost:5000";
+const LIMIT = 10;
 
 function ProjectList({ onView, onEdit }) {
   const [projects, setProjects] = useState([]);
   const [filters, setFilters] = useState({});
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchProjects();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [filters, page]);
 
   function fetchProjects() {
     setLoading(true);
     const params = new URLSearchParams();
     if (filters.techStack) params.append("techStack", filters.techStack);
     if (filters.category) params.append("category", filters.category);
+    if (filters.search) params.append("search", filters.search);
+    params.append("page", page);
+    params.append("limit", LIMIT);
     fetch(`${BACKEND_URL}/api/projects?${params.toString()}`)
       .then((res) => res.json())
-      .then((data) => {
-        setProjects(data);
+      .then((result) => {
+        setProjects(result.data);
+        setTotal(result.total);
         setLoading(false);
       })
       .catch((err) => {
@@ -35,6 +42,7 @@ function ProjectList({ onView, onEdit }) {
 
   function handleFilterChange(name, value) {
     setFilters((prev) => ({ ...prev, [name]: value }));
+    setPage(1);
   }
 
   function handleDelete(id) {
@@ -61,13 +69,14 @@ function ProjectList({ onView, onEdit }) {
           />
         ))
       )}
+      <Pagination
+        page={page}
+        total={total}
+        limit={LIMIT}
+        onPageChange={setPage}
+      />
     </div>
   );
 }
-
-ProjectList.propTypes = {
-  onView: PropTypes.func,
-  onEdit: PropTypes.func,
-};
 
 export default ProjectList;
