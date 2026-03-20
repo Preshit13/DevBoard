@@ -12,10 +12,7 @@ function Pagination({ page, total, limit, onPageChange }) {
   return (
     <div className="pagination">
       <div className="pagination-controls">
-        <button
-          onClick={() => onPageChange(page - 1)}
-          disabled={page <= 1}
-        >
+        <button onClick={() => onPageChange(page - 1)} disabled={page <= 1}>
           ← Previous
         </button>
         <span className="pagination-info">

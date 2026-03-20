@@ -9,7 +9,8 @@ router.get("/", async (req, res) => {
   try {
     const db = getDB();
     const { sort, page, limit } = req.query;
-    const sortField = sort === "asc" || sort === "desc" ? "rating" : "createdAt";
+    const sortField =
+      sort === "asc" || sort === "desc" ? "rating" : "createdAt";
     const sortOrder = sort === "asc" ? 1 : -1;
 
     const pageNum = parseInt(page) || 1;
@@ -36,7 +37,8 @@ router.get("/project/:projectId", async (req, res) => {
   try {
     const db = getDB();
     const { sort, page, limit } = req.query;
-    const sortField = sort === "asc" || sort === "desc" ? "rating" : "createdAt";
+    const sortField =
+      sort === "asc" || sort === "desc" ? "rating" : "createdAt";
     const sortOrder = sort === "asc" ? 1 : -1;
     const query = { projectId: req.params.projectId };
 
