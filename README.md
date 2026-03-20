@@ -87,7 +87,7 @@ DevBoard solves the problem of developers having no dedicated lightweight platfo
 
 ## Video Demo
 
-🎥 [Project Walkthrough Video](your_youtube_link_here)
+🎥 [Project Walkthrough Video](https://www.youtube.com/watch?v=bwxlZQ2Xn_k)
 
 ## MongoDB Collections
 
